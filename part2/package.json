@@ -1,0 +1,13 @@
+{
+  "name": "linx-part1",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "author": "procopio420 <lucas-procopio@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
+}

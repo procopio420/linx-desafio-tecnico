@@ -1,7 +1,7 @@
 const fileSystem = require('fs');
 const readline = require('readline');
 const axios = require('axios');
-const { url } = require('inspector');
+const { cpuUsage } = require('process');
 
 async function processLineByLine(input) {
   const response = {};
@@ -22,32 +22,37 @@ async function processLineByLine(input) {
 
   return response;
 }
-
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 async function sanitizeImages(arrayImages) {
   const goodImages = [];
   const promises = [];
+  let i = 0;
   arrayImages.forEach((imageUrl) => {
     promises.push(
       axios
         .get(imageUrl)
-        .then((_) => goodImages.push(imageUrl).catch((e) => console.log(e))),
+        .then((_) => goodImages.push(imageUrl))
+        .catch((e) => console.log(e)),
     );
   });
-
+  console.log(promises);
   await Promise.all(promises);
-
+  await sleep(1000);
   return goodImages;
 }
 
 async function main() {
   const input = await processLineByLine('./input-dump');
   const final = [];
+  const promises = [];
   Object.entries(input).forEach(async (product) => {
-    final.push({
-      productId: product[0],
-      images: await sanitizeImages(product[1]),
-    });
+    await sanitizeImages(product[1]).then((goodImages) =>
+      final.push({ productId: product[0], images: goodImages }),
+    );
   });
+  console.log(final);
 }
 
 main();

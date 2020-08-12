@@ -1,3 +1,4 @@
+require('dotenv').config();
 const startServer = (app) => {
   app.listen(process.env.PORT, () => {
     console.log(
